@@ -674,7 +674,7 @@ function foreign(p,dim,st,id,fontsty) {
   var dx = 0; var dy = fontsize/3;
   var node;
   // next 2 lines fix DOM exception in Chrome
-  var frag = document.createElementNS("http://www.w3.org/1999/xhtml","body");
+  var frag = document.createElementNS("http://www.w3.org/1999/xhtml","div");
   frag.innerHTML = st;
   if (id!=null) node = doc.getElementById(id);
   if (node==null) {
