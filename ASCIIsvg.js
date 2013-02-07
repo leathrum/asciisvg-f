@@ -671,7 +671,6 @@ function text(p,st,pos,id,fontsty) {
 
 // following method -- TEL 2/6/2103
 function foreign(p,dim,st,id,fontsty) {
-  var dx = 0; var dy = fontsize/3;
   var node;
   // next 2 lines fix DOM exception in Chrome
   var frag = document.createElementNS("http://www.w3.org/1999/xhtml","div");
@@ -684,8 +683,8 @@ function foreign(p,dim,st,id,fontsty) {
     node.appendChild(frag);
   }
   if (MathJax!=null) MathJax.Hub.Queue(["Typeset",MathJax.Hub,node]);//!!
-  node.setAttribute("x",p[0]*xunitlength+origin[0]+dx);
-  node.setAttribute("y",height-p[1]*yunitlength-origin[1]+dy);
+  node.setAttribute("x",p[0]*xunitlength+origin[0]);
+  node.setAttribute("y",height-p[1]*yunitlength-origin[1]);
   node.setAttribute("width",dim[0]);
   node.setAttribute("height",dim[1]);
   node.setAttribute("font-style",(fontsty!=null?fontsty:fontstyle));
