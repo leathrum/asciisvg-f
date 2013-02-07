@@ -14,7 +14,13 @@ used to include [MathJax](http://www.mathjax.org) labels in an ASCIIsvg graph.
 
 ### Notes:
 
-This is based on ASCIIsvg version 1.2, which is missing a few features found in the graphing routings included
+* This is based on ASCIIsvg version 1.2, which is missing a few features found in the graphing routings included
 with the current version of ASCIIMathML -- notably, this does not support the `agraph...endagraph` or 
 `\begin{graph}...\end{graph}` syntax for delimiting the graphing environment, you have to use the `<embed>`
 syntax.  I hope to push an update soon which will fix this.
+
+* This is primarily intended as a way to include MathJax-formatted labels in ASCIIsvg graphs.  To simplify this,
+the contents of the `"foreign string"` are wrapped in a `<div>` element with the HTML5 namspace.  Moreover,
+the `foreign()` method includes a check to see if MathJax is loaded, and if it is, calls the MathJax `Typeset()`
+method with the contents of the `foreignObject` element node.  Other foreign content can be used, but 
+namespaces must be explicit within the string.
