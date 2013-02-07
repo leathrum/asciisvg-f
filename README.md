@@ -24,3 +24,8 @@ the contents of the `"foreign string"` are wrapped in a `<div>` element with the
 the `foreign()` method includes a check to see if MathJax is loaded, and if it is, calls the MathJax `Typeset()`
 method with the contents of the `foreignObject` element node.  Other foreign content can be used, but 
 namespaces must be explicit within the string.
+
+* The content is placed within the SVG with the point `[x,y]` at the upper left corner of the content rectangle.
+The width and height of the content rectangle must be given explicity, in the pair `[w,h]` -- height and width
+attributes are required by the SVG `foreignObject` element, and may disagree with the actual dimensions of the
+content, so parts of the content may be cropped if these are not set carefully.
