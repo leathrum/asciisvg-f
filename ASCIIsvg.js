@@ -673,7 +673,7 @@ function text(p,st,pos,id,fontsty) {
 function foreign(p,dim,st,id,fontsty) {
   var node;
   // next 2 lines fix DOM exception in Chrome
-  var frag = document.createElementNS("http://www.w3.org/1999/xhtml","div");
+  var frag = document.createElementNS("http://www.w3.org/1999/xhtml","span");
   frag.innerHTML = st;
   if (id!=null) node = doc.getElementById(id);
   if (node==null) {
@@ -682,7 +682,7 @@ function foreign(p,dim,st,id,fontsty) {
     svgpicture.appendChild(node);
     node.appendChild(frag);
   }
-  if (MathJax!=null) MathJax.Hub.Queue(["Typeset",MathJax.Hub,node]);//!!
+  if (typeof MathJax != "undefined") MathJax.Hub.Queue(["Typeset",MathJax.Hub,node]);//!!
   node.setAttribute("x",p[0]*xunitlength+origin[0]);
   node.setAttribute("y",height-p[1]*yunitlength-origin[1]);
   node.setAttribute("width",dim[0]);
