@@ -29,3 +29,9 @@ namespaces must be explicit within the string.
 The width and height of the content rectangle must be given explicity, in the pair `[w,h]` -- height and width
 attributes are required by the SVG `foreignObject` element, and may disagree with the actual dimensions of the
 content, so parts of the content may be cropped if these are not set carefully.
+
+### To Do:
+
+* Extract graphing code from ASCIIMathML.js to get current version and new features
+
+* Work on way to dynamically resize `foreignObject` based on dimensions of processed MathJax (or other content?)
