@@ -673,8 +673,9 @@ function text(p,st,pos,id,fontsty) {
 function foreign(p,dim,st,id,fontsty) {
   var dx = 0; var dy = fontsize/3;
   var node;
-  var  frag = document.createRange().createContextualFragment(
-         "<div xmlns='http://www.w3.org/1999/xhtml'>"+st+"</div>");
+  // next 2 lines fix DOM exception in Chrome
+  var frag = document.createElementNS("http://www.w3.org/1999/xhtml","body");
+  frag.innerHTML = st;
   if (id!=null) node = doc.getElementById(id);
   if (node==null) {
     node = myCreateElementSVG("foreignObject");
