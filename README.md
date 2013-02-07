@@ -14,7 +14,7 @@ used to include [MathJax](http://www.mathjax.org) labels in an ASCIIsvg graph.
 
 ### Notes:
 
-* This is based on ASCIIsvg version 1.2, which is missing a few features found in the graphing routings included
+* This is based on ASCIIsvg version 1.2, which is missing a few features found in the graphing routines included
 with the current version of ASCIIMathML -- notably, this does not support the `agraph...endagraph` or 
 `\begin{graph}...\end{graph}` syntax for delimiting the graphing environment, you have to use the `<embed>`
 syntax.  I hope to push an update soon which will fix this.
