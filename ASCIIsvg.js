@@ -670,11 +670,14 @@ function text(p,st,pos,id,fontsty) {
 }
 
 // following method -- TEL 2/6/2103
-function foreign(p,dim,st,id,fontsty) {
+function foreign(p,st,id,fontsty) {
   var node;
   // next 2 lines fix DOM exception in Chrome
   var frag = document.createElementNS("http://www.w3.org/1999/xhtml","span");
   frag.innerHTML = st;
+  // next 2 lines set up access for dynamic sizing
+  var uid = "_asciisvg_f_foreign_object_content_"
+  frag.id = uid; 
   if (id!=null) node = doc.getElementById(id);
   if (node==null) {
     node = myCreateElementSVG("foreignObject");
@@ -682,11 +685,13 @@ function foreign(p,dim,st,id,fontsty) {
     svgpicture.appendChild(node);
     node.appendChild(frag);
   }
-  if (typeof MathJax != "undefined") MathJax.Hub.Queue(["Typeset",MathJax.Hub,node]);//!!
+  if (typeof MathJax != "undefined") 
+      MathJax.Hub.Queue(["Typeset",MathJax.Hub,node]);//!!
+  // next 2 lines use offset[Width|Height] to size rectangle dynamically
+  node.setAttribute("width",document.getElementById(uid).offsetWidth);
+  node.setAttribute("height",document.getElementById(uid).offsetHeight);
   node.setAttribute("x",p[0]*xunitlength+origin[0]);
   node.setAttribute("y",height-p[1]*yunitlength-origin[1]);
-  node.setAttribute("width",dim[0]);
-  node.setAttribute("height",dim[1]);
   node.setAttribute("font-style",(fontsty!=null?fontsty:fontstyle));
   node.setAttribute("font-family",fontfamily);
   node.setAttribute("font-size",fontsize);
