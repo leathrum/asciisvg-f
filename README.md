@@ -25,7 +25,7 @@ method with the contents of the `foreignObject` element node.  Other foreign con
 namespaces must be explicit within the string.
 * The content is placed within the SVG with the point `[x,y]` at the upper left corner of the content rectangle.
 The width and height of the content rectangle are determined from the `offsetWidth` and `offsetHeight` of the
-containing `<span>`.  (*Warning:*  Furher testing indicates that the dynamic
+containing `<span>`.  ( *Warning:*  Furher testing indicates that the dynamic
 sizing code is not working as well as I had hoped -- it needs more work.)
 * When using MathJax TeX input in the `"foreign string"`, it is important to use *inline* math mode delimiters,
 `\(...\)` (or `$...$` with appropriate configuration) so that dynamic sizing will work correctly.
