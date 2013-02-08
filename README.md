@@ -38,6 +38,7 @@ block-level elements are set up to fill the width of the containing element.
 * The `"foreign string"` is a JavaScript string, so JavaScript escaping rules apply.  In particular, when using
 MathJax TeX input, backslashes must be doubled, including in the TeX delimiters.  For example:
 
+
     foreign([-1,1],"\\(f(x)=\\sin(x)\\)")
 
 ### To Do:
