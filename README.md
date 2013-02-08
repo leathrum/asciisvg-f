@@ -5,7 +5,7 @@ JavaScript library.  The modifications provide support
 for the SVG `foreignObject` tag.  This feature is implemented by a new method, `foreign()`, which has the following
 usage syntax:
 
-    foreign([x,y],[w,h],"foreign string"{,id})
+    foreign([x,y],"foreign string"{,id})
     
 Also included here are Jipsen's original `d.svg` and a sample file `test.html` 
 ([view in browser](http://cs.jsu.edu/~leathrum/asciisvg-f/test.html))
