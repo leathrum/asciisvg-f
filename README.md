@@ -18,26 +18,21 @@ used to include [MathJax](http://www.mathjax.org) labels in an ASCIIsvg graph.
 with the current version of ASCIIMathML -- notably, this does not support the `agraph...endagraph` or 
 `\begin{graph}...\end{graph}` syntax for delimiting the graphing environment, you have to use the `<embed>`
 syntax.  I hope to push an update soon which will fix this.
-
 * This is primarily intended as a way to include MathJax-formatted labels in ASCIIsvg graphs.  To simplify this,
 the contents of the `"foreign string"` are wrapped in a `<span>` element with the HTML5 namspace.  Moreover,
 the `foreign()` method includes a check to see if MathJax is loaded, and if it is, calls the MathJax `Typeset()`
 method with the contents of the `foreignObject` element node.  Other foreign content can be used, but 
 namespaces must be explicit within the string.
-
 * The content is placed within the SVG with the point `[x,y]` at the upper left corner of the content rectangle.
 The width and height of the content rectangle are determined from the `offsetWidth` and `offsetHeight` of the
 containing `<span>`.
-
 * When using MathJax TeX input in the `"foreign string"`, it is important to use *inline* math mode delimiters,
 `\(...\)` (or `$...$` with appropriate configuration) so that dynamic sizing will work correctly.
 Display math delimiters `\[...\]` or `$$...$$` place the rendered math in a
 block-level element, which in particular causes problems with computing the width of the element because
 block-level elements are set up to fill the width of the containing element.
-
 * The `"foreign string"` is a JavaScript string, so JavaScript escaping rules apply.  In particular, when using
 MathJax TeX input, backslashes must be doubled, including in the TeX delimiters.  For example:
-
 
     foreign([-1,1],"\\(f(x)=\\sin(x)\\)")
 
