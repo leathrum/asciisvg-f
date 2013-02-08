@@ -26,12 +26,15 @@ method with the contents of the `foreignObject` element node.  Other foreign con
 namespaces must be explicit within the string.
 
 * The content is placed within the SVG with the point `[x,y]` at the upper left corner of the content rectangle.
-The width and height of the content rectangle must be given explicity, in the pair `[w,h]` -- height and width
-attributes are required by the SVG `foreignObject` element, and may disagree with the actual dimensions of the
-content, so parts of the content may be cropped if these are not set carefully.
+The width and height of the content rectangle are determined from the `offsetWidth` and `offsetHeight` of the
+containing `<span>`.
+
+* When using MathJax TeX input in the `"foreign string"`, it is important to use *inline* math mode delimiters,
+`\(...\)` (or `$...$` with appropriate configuration) so that dynamic sizing will work correctly.
+Display math delimiters `\[...\]` or `$$...$$` place the rendered math in a
+block-level element, which in particular causes problems with computing the width of the element because
+block-level elements are set up to fill the width of the containing element.
 
 ### To Do:
 
 * Extract graphing code from ASCIIMathML.js to get current version and new features
-
-* Work on way to dynamically resize `foreignObject` based on dimensions of processed MathJax (or other content?)
