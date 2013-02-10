@@ -44,6 +44,15 @@ MathJax TeX input, backslashes must be doubled, including in the TeX delimiters.
 
         foreign([-1,1],"\\(f(x)=\\sin(x)\\)")
         
+* The preprocessors for MathJax and ASCIIMathML clash when using the `ASCIIMathML-svg.js` version, so when
+using the `agraph...endagraph` or `\begin{graph}...\end{graph}` syntax with MathJax TeX input in the 
+`"foreign string"`, you must protect the ASCIIsvg code from the MathJax preprocessor by enclosing it in an
+element with the `class` attribute set to `class="tex2jax_ignore"`.  
+In this case, though, there must be at least one MathJax TeX expression *outside* the `tex2jax_ignore`
+element -- if there isn't, then MathJax won't realize that there is anything to process, won't finish
+initializing, and thus won't be available for the `Typeset()` call later.  The MathJax expression outside
+the ASCIIsvg may be empty and may be made invisible by placing it in a zero-size element in the page.
+See the `test.html` file for an example.
 * *Browser Support:*  Tested in Firefox and Chrome, probably also works in Safari and Opera.  In order for a
 browser to support this, the browser must support SVG and in particular the `foreignObject` element and must 
 allow JavaScript to manipulate the DOM for the `foreignObject` element.  This is known to work in Gecko and
@@ -53,5 +62,4 @@ provide all necessary support, though.
 
 ### To Do:
 
-* I think everything is basically working now, may want to add ability (similar to `text()` method) to change
-whether anchor point is in upper left or somewhere else
+* Would like to eliminate the need for the `tex2jax_ignore` and associated peculiarities
