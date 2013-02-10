@@ -26,14 +26,14 @@ with the current version of ASCIIMathML -- notably, this does *not* support the 
 `\begin{graph}...\end{graph}` syntax for delimiting the graphing environment, you have to use the `<embed>`
 syntax. 
 * This is primarily intended as a way to include MathJax-formatted labels in ASCIIsvg graphs.  To simplify this,
-the contents of the `"foreign string"` are wrapped in a `<span>` element with the HTML5 namspace.  Moreover,
+the contents of the `"foreign string"` are wrapped in a `<div>` element with the HTML5 namspace.  Moreover,
 the `foreign()` method includes a check to see if MathJax is loaded, and if it is, calls the MathJax `Typeset()`
 method with the contents of the `foreignObject` element node.  Other foreign content can be used, but 
 namespaces must be explicit within the string.
 * The content is placed within the SVG with the point `[x,y]` at the upper left corner of the content rectangle.
 The width and height of the content rectangle are determined from the `offsetWidth` and `offsetHeight` of the
-containing `<span>`.  ( *Warning:*  Further testing indicates that the dynamic
-sizing code is not working as well as I had hoped -- it needs more work.)
+containing `<div>`.  In order to be sure the `<div>` takes the correct values for these, it is given `style`
+attribute value `float:left`.
 * When using MathJax TeX input in the `"foreign string"`, it is important to use *inline* math mode delimiters,
 `\(...\)` (or `$...$` with appropriate configuration) so that dynamic sizing will work correctly.
 Display math delimiters `\[...\]` or `$$...$$` place the rendered math in a
@@ -53,5 +53,5 @@ provide all necessary support, though.
 
 ### To Do:
 
-* More work needed on dynamic resizing.
-* Extract graphing code from ASCIIMathML.js to get current version and new features
+* I think everything is basically working now, may want to add ability (similar to `text()` method) to change
+whether anchor point is in upper left or somewhere else
