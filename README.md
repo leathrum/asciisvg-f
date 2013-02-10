@@ -38,7 +38,8 @@ attribute value `float:left`.
 `\(...\)` (or `$...$` with appropriate configuration) so that dynamic sizing will work correctly.
 Display math delimiters `\[...\]` or `$$...$$` place the rendered math in a
 block-level element, which in particular causes problems with computing the width of the element because
-block-level elements are set up to fill the width of the containing element.
+block-level elements are set up to fill the width of the containing element.  If you still need display-size
+rendering, use `\displaystyle` in the MathJax expression.
 * The `"foreign string"` is a JavaScript string, so JavaScript escaping rules apply.  In particular, when using
 MathJax TeX input, backslashes must be doubled, including in the TeX delimiters.  For example:
 
@@ -47,7 +48,8 @@ MathJax TeX input, backslashes must be doubled, including in the TeX delimiters.
 * The preprocessors for MathJax and ASCIIMathML clash when using the `ASCIIMathML-svg.js` version, so when
 using the `agraph...endagraph` or `\begin{graph}...\end{graph}` syntax with MathJax TeX input in the 
 `"foreign string"`, you must protect the ASCIIsvg code from the MathJax preprocessor by enclosing it in an
-element with the `class` attribute set to `class="tex2jax_ignore"`.
+element with the `class` attribute set to `class="tex2jax_ignore"`, or use one of the tags that the
+MathJax `tex2jax` preprocessor is already set up to ignore, like `<code>` or `<pre>`.
 In this case, though, there must be at least one MathJax TeX expression *outside* the `tex2jax_ignore`
 element -- if there isn't, then MathJax won't realize that there is anything to process, won't finish
 initializing, and thus won't be available for the `Typeset()` call later.  The MathJax expression outside
