@@ -876,8 +876,9 @@ function text(p,st,pos,id,fontsty) {
 // following method -- TEL 2/6/2013
 function foreign(p,st,id,fontsty) {
   var node;
-  // next 2 lines fix DOM exception in Chrome
-  var frag = document.createElementNS("http://www.w3.org/1999/xhtml","span");
+  // next lines fix DOM exception in Chrome, dynamic resizing with div and float:left
+  var frag = document.createElementNS("http://www.w3.org/1999/xhtml","div");
+  frag.setAttribute("style","float:left");
   frag.innerHTML = st;
   var uid = "_asciisvg_f_foreign_object_content_"
   frag.id = uid; 
@@ -888,16 +889,17 @@ function foreign(p,st,id,fontsty) {
     svgpicture.appendChild(node);
     node.appendChild(frag);
   }
-  if (typeof MathJax != "undefined") //{
+  // conditional call to MathJax Typeset, on queue, and dynamic resizing
+  if (typeof MathJax != "undefined") {
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,node]);//!!
-    //MathJax.Hub.Queue(function() {
-    //  node.setAttribute("width",document.getElementById(uid).offsetWidth);
-    //  node.setAttribute("height",document.getElementById(uid).offsetHeight); 
-    //});
-  //} else {
-  node.setAttribute("width",document.getElementById(uid).offsetWidth);
-  node.setAttribute("height",document.getElementById(uid).offsetHeight);
-  //}
+    MathJax.Hub.Queue(function() {
+      node.setAttribute("width",document.getElementById(uid).offsetWidth);
+      node.setAttribute("height",document.getElementById(uid).offsetHeight); 
+    });
+  } else {
+    node.setAttribute("width",document.getElementById(uid).offsetWidth);
+    node.setAttribute("height",document.getElementById(uid).offsetHeight);
+  }
   node.setAttribute("x",p[0]*xunitlength+origin[0]);
   node.setAttribute("y",height-p[1]*yunitlength-origin[1]);
   node.setAttribute("font-style",(fontsty!=null?fontsty:fontstyle));
@@ -1347,7 +1349,9 @@ function generic()
   if (translateOnLoad) {
 // deleted some unnecessary stuff in this method
       if (translateASCIIsvg) {
-        // added next two lines to catch delimiters
+        // added next lines to catch delimiters
+        // clash between this and MathJax preprocessing
+        // so if MathJax loaded, delay this using MathJax queue
         if (typeof MathJax == "undefined") {
           document.getElementsByTagName("body")[0].innerHTML = 
             simpleLaTeXformatting(document.getElementsByTagName("body")[0].innerHTML);
