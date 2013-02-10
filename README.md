@@ -47,7 +47,7 @@ MathJax TeX input, backslashes must be doubled, including in the TeX delimiters.
 * The preprocessors for MathJax and ASCIIMathML clash when using the `ASCIIMathML-svg.js` version, so when
 using the `agraph...endagraph` or `\begin{graph}...\end{graph}` syntax with MathJax TeX input in the 
 `"foreign string"`, you must protect the ASCIIsvg code from the MathJax preprocessor by enclosing it in an
-element with the `class` attribute set to `class="tex2jax_ignore"`.  
+element with the `class` attribute set to `class="tex2jax_ignore"`.
 In this case, though, there must be at least one MathJax TeX expression *outside* the `tex2jax_ignore`
 element -- if there isn't, then MathJax won't realize that there is anything to process, won't finish
 initializing, and thus won't be available for the `Typeset()` call later.  The MathJax expression outside
