@@ -53,7 +53,7 @@ element -- if there isn't, then MathJax won't realize that there is anything to 
 initializing, and thus won't be available for the `Typeset()` call later.  The MathJax expression outside
 the ASCIIsvg may be empty and may be made invisible by placing it in a zero-size element in the page.
 See the `test.html` file for an example.
-* *Browser Support:*  Tested in Firefox and Chrome, probably also works in Safari and Opera.  In order for a
+*Browser Support:*  Tested in Firefox and Chrome, probably also works in Safari and Opera.  In order for a
 browser to support this, the browser must support SVG and in particular the `foreignObject` element and must 
 allow JavaScript to manipulate the DOM for the `foreignObject` element.  This is known to work in Gecko and
 Webkit browsers recent enough to support SVG.  The situation is different, and more complicated, for Internet
