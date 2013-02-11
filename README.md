@@ -37,9 +37,8 @@ attribute value `float:left`.
 * When using MathJax TeX input in the `"foreign string"`, it is important to use *inline* math mode delimiters,
 `\(...\)` (or `$...$` with appropriate configuration) so that dynamic sizing will work correctly.
 Display math delimiters `\[...\]` or `$$...$$` place the rendered math in a
-block-level element, which in particular causes problems with computing the width of the element because
-block-level elements are set up to fill the width of the containing element.  If you still need display-size
-rendering, use `\displaystyle` in the MathJax expression.
+block-level element, which in particular causes extra space in the height of the element.
+If you still need display-size rendering, use `\displaystyle` in the MathJax expression.
 * The `"foreign string"` is a JavaScript string, so JavaScript escaping rules apply.  In particular, when using
 MathJax TeX input, backslashes must be doubled, including in the TeX delimiters.  For example:
 
