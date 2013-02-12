@@ -44,12 +44,9 @@ MathJax TeX input, backslashes must be doubled, including in the TeX delimiters.
 
         foreign([-1,1],"\\(f(x)=\\sin(x)\\)")
         
-* The preprocessors for MathJax and ASCIIMathML clash when using the `ASCIIMathML-svg.js` version, so when
-using the `agraph...endagraph` or `\begin{graph}...\end{graph}` syntax with MathJax TeX input in the 
-`"foreign string"`, you must protect the ASCIIsvg code from the MathJax preprocessor by enclosing it in an
-element with the `class` attribute set to `class="tex2jax_ignore"`, or use one of the tags that the
-MathJax `tex2jax` preprocessor is already set up to ignore, like `<code>` or `<pre>`.
-See the `test.html` file for an example.
+* The contents of `agraph...endagraph` and `\begin{graph}...\end{graph}` environments are given the
+CSS class `tex2jax_ignore` by the preprocessor, to protect the contents from the MathJax preprocessor.
+This does not need to be done explicitly in the HTML.
 * *Browser Support:*  Tested in Firefox and Chrome, probably also works in Safari and Opera.  In order for a
 browser to support this, the browser must support SVG and in particular the `foreignObject` element and must 
 allow JavaScript to manipulate the DOM for the `foreignObject` element.  This is known to work in Gecko and
@@ -59,4 +56,4 @@ provide all necessary support, though.
 
 ### To Do:
 
-* Would like to eliminate the need for the `tex2jax_ignore`
+* Everything seems to be in pretty good shape now, but I'm sure something else will come up....
