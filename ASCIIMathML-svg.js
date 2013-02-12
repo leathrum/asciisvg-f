@@ -59,9 +59,10 @@ if (document.getElementById==null)
 
 
 // next method adapted from LaTeX part of ASCIIMathML.js
+// added tex2jax_ignore to class
 function simpleLaTeXformatting(st) {
-  st = st.replace(/<embed\s+class\s?=\s?"ASCIIsvg"/g,"<embed class=\"ASCIIsvg\" src=\""+dsvglocation+"d.svg\" wmode=\"transparent\"");
-  st = st.replace(/(?:\\begin{a?graph}|agraph|\(:graph\s)((.|\n)*?)(?:\\end{a?graph}|enda?graph|:\))/g,function(s,t){return "<div><embed class=\"ASCIIsvg\" src=\""+dsvglocation+"d.svg\" wmode=\"transparent\" script=\'"+t.replace(/<\/?(br|p|pre)\s?\/?>/gi,"\n")+"\'/></div>"});
+  st = st.replace(/<embed\s+class\s?=\s?"ASCIIsvg"/g,"<embed class=\"ASCIIsvg tex2jax_ignore\" src=\""+dsvglocation+"d.svg\" wmode=\"transparent\"");
+  st = st.replace(/(?:\\begin{a?graph}|agraph|\(:graph\s)((.|\n)*?)(?:\\end{a?graph}|enda?graph|:\))/g,function(s,t){return "<div><embed class=\"ASCIIsvg tex2jax_ignore\" src=\""+dsvglocation+"d.svg\" wmode=\"transparent\" script=\'"+t.replace(/<\/?(br|p|pre)\s?\/?>/gi,"\n")+"\'/></div>"});
 //  st = st.replace(/\(:graph((.|\n)*?):\)/g,function(s,t){return "<div><embed class=\"ASCIIsvg\" src=\""+dsvglocation+"d.svg\" wmode=\"transparent\" script=\'"+t.replace(/<\/?(br|p|pre)\s?\/?>/gi,"\n")+"\'/></div>"});
   return st
 }
@@ -1340,15 +1341,15 @@ function removeCoord(evt) {
 // this is a highly simplified version --
 // just walks the DOM tree and preprocesses text nodes
 function processNodes(n) {
+  // to be sure text in <body> is treated as text *node*, add empty <span>
+  if (n.nodeName == "BODY") n.appendChild(document.createElement("span"));
   for (i=0;i<n.childNodes.length;i++) {
     if (n.childNodes[i].nodeType == Node.TEXT_NODE) {
       var nn = document.createElement("span");
       nn.innerHTML = simpleLaTeXformatting(n.childNodes[i].textContent);
       n.replaceChild(nn,n.childNodes[i]);
-    }
-    else if (n.childNodes[i].nodeType == Node.ELEMENT_NODE) { 
+    } else if (n.childNodes[i].nodeType == Node.ELEMENT_NODE) 
       processNodes(n.childNodes[i]);
-    }
   }
 }
 
@@ -1362,13 +1363,12 @@ function generic()
   if (translateOnLoad) {
 // deleted some unnecessary stuff in this method
       if (translateASCIIsvg) {
-        // added next two lines to catch delimiters
         if (typeof MathJax == "undefined") {
-          processNodes(document.getElementsByTagName("body")[0]);//.innerHTML);
+          processNodes(document.getElementsByTagName("body")[0]);
           drawPictures();
         }
         else MathJax.Hub.Queue(function(){
-          processNodes(document.getElementsByTagName("body")[0]);//.innerHTML);
+          processNodes(document.getElementsByTagName("body")[0]);
           drawPictures();
         });
       }
