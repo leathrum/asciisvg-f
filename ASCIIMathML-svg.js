@@ -62,7 +62,7 @@ if (document.getElementById==null)
 function simpleLaTeXformatting(st) {
   st = st.replace(/<embed\s+class\s?=\s?"ASCIIsvg"/g,"<embed class=\"ASCIIsvg\" src=\""+dsvglocation+"d.svg\" wmode=\"transparent\"");
   st = st.replace(/(?:\\begin{a?graph}|agraph|\(:graph\s)((.|\n)*?)(?:\\end{a?graph}|enda?graph|:\))/g,function(s,t){return "<div><embed class=\"ASCIIsvg\" src=\""+dsvglocation+"d.svg\" wmode=\"transparent\" script=\'"+t.replace(/<\/?(br|p|pre)\s?\/?>/gi,"\n")+"\'/></div>"});
-  st = st.replace(/\(:graph((.|\n)*?):\)/g,function(s,t){return "<div><embed class=\"ASCIIsvg\" src=\""+dsvglocation+"d.svg\" wmode=\"transparent\" script=\'"+t.replace(/<\/?(br|p|pre)\s?\/?>/gi,"\n")+"\'/></div>"});
+//  st = st.replace(/\(:graph((.|\n)*?):\)/g,function(s,t){return "<div><embed class=\"ASCIIsvg\" src=\""+dsvglocation+"d.svg\" wmode=\"transparent\" script=\'"+t.replace(/<\/?(br|p|pre)\s?\/?>/gi,"\n")+"\'/></div>"});
   return st
 }
 
@@ -876,7 +876,6 @@ function text(p,st,pos,id,fontsty) {
 // following method -- TEL 2/6/2013
 function foreign(p,st,id,fontsty) {
   var node;
-  // next lines fix DOM exception in Chrome, dynamic resizing with div and float:left
   var frag = document.createElementNS("http://www.w3.org/1999/xhtml","div");
   frag.setAttribute("style","float:left");
   frag.innerHTML = st;
@@ -889,7 +888,6 @@ function foreign(p,st,id,fontsty) {
     svgpicture.appendChild(node);
     node.appendChild(frag);
   }
-  // conditional call to MathJax Typeset, on queue, and dynamic resizing
   if (typeof MathJax != "undefined") {
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,node]);//!!
     MathJax.Hub.Queue(function() {
@@ -1339,6 +1337,21 @@ function removeCoord(evt) {
     cnode.mtext([svgroot.getAttribute("width")-0,svgroot.getAttribute("height")-0],"", "aboveleft", "");
 }
 
+// this is a highly simplified version --
+// just walks the DOM tree and preprocesses text nodes
+function processNodes(n) {
+  for (i=0;i<n.childNodes.length;i++) {
+    if (n.childNodes[i].nodeType == Node.TEXT_NODE) {
+      var nn = document.createElement("span");
+      nn.innerHTML = simpleLaTeXformatting(n.childNodes[i].textContent);
+      n.replaceChild(nn,n.childNodes[i]);
+    }
+    else if (n.childNodes[i].nodeType == Node.ELEMENT_NODE) { 
+      processNodes(n.childNodes[i]);
+    }
+  }
+}
+
 // also deleted calculator code here
 
 // GO1.1 Generic onload by Brothercake
@@ -1349,17 +1362,13 @@ function generic()
   if (translateOnLoad) {
 // deleted some unnecessary stuff in this method
       if (translateASCIIsvg) {
-        // added next lines to catch delimiters
-        // clash between this and MathJax preprocessing
-        // so if MathJax loaded, delay this using MathJax queue
+        // added next two lines to catch delimiters
         if (typeof MathJax == "undefined") {
-          document.getElementsByTagName("body")[0].innerHTML = 
-            simpleLaTeXformatting(document.getElementsByTagName("body")[0].innerHTML);
+          processNodes(document.getElementsByTagName("body")[0]);//.innerHTML);
           drawPictures();
         }
         else MathJax.Hub.Queue(function(){
-          document.getElementsByTagName("body")[0].innerHTML = 
-            simpleLaTeXformatting(document.getElementsByTagName("body")[0].innerHTML);
+          processNodes(document.getElementsByTagName("body")[0]);//.innerHTML);
           drawPictures();
         });
       }
