@@ -19,8 +19,10 @@ The test file uses the `ASCIIMathML-svg.js` version.
 
 ### Notes:
 
-* `ASCIIMathML-svg.js` is based on ASCIIMathML version 2.0.2, and includes support for the `agraph...endagraph` and
-`\begin{graph}...\end{graph}` syntax for delimiting the graphing environment, as well as a few other features.
+* `ASCIIMathML-svg.js` is based on ASCIIMathML version 2.0.2, and includes support for the `agraph...endagraph`
+syntax for delimiting the graphing environment, as well as a few other features.
+*Warning:* The `\begin{graph}...\end{graph}` syntax is not working yet, at least not without
+wrapping it in a `tex2jax_ignore` region to protect it from the MathJax preprocessor.
 * `ASCIIsvg.js` is based on ASCIIsvg version 1.2, which is missing a few features found in the graphing routines included
 with the current version of ASCIIMathML -- notably, this does *not* support the `agraph...endagraph` or 
 `\begin{graph}...\end{graph}` syntax for delimiting the graphing environment, you have to use the `<embed>`
@@ -44,7 +46,7 @@ MathJax TeX input, backslashes must be doubled, including in the TeX delimiters.
 
         foreign([-1,1],"\\(f(x)=\\sin(x)\\)")
         
-* The contents of `agraph...endagraph` and `\begin{graph}...\end{graph}` environments are given the
+* The contents of `agraph...endagraph` environments are given the
 CSS class `tex2jax_ignore` by the preprocessor, to protect the contents from the MathJax preprocessor.
 This does not need to be done explicitly in the HTML.
 * *Browser Support:*  Tested in Firefox and Chrome, probably also works in Safari and Opera.  In order for a
@@ -56,4 +58,4 @@ provide all necessary support, though.
 
 ### To Do:
 
-* Everything seems to be in pretty good shape now, but I'm sure something else will come up....
+* `\begin{graph}...\end{graph}` not working....
