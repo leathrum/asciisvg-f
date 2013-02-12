@@ -49,10 +49,6 @@ using the `agraph...endagraph` or `\begin{graph}...\end{graph}` syntax with Math
 `"foreign string"`, you must protect the ASCIIsvg code from the MathJax preprocessor by enclosing it in an
 element with the `class` attribute set to `class="tex2jax_ignore"`, or use one of the tags that the
 MathJax `tex2jax` preprocessor is already set up to ignore, like `<code>` or `<pre>`.
-In this case, though, there must be at least one MathJax TeX expression *outside* the `tex2jax_ignore`
-element -- if there isn't, then MathJax won't realize that there is anything to process, won't finish
-initializing, and thus won't be available for the `Typeset()` call later.  The MathJax expression outside
-the ASCIIsvg may be empty and may be made invisible by placing it in a zero-size element in the page.
 See the `test.html` file for an example.
 * *Browser Support:*  Tested in Firefox and Chrome, probably also works in Safari and Opera.  In order for a
 browser to support this, the browser must support SVG and in particular the `foreignObject` element and must 
