@@ -59,4 +59,4 @@ provide all necessary support, though.
 
 ### To Do:
 
-* Would like to eliminate the need for the `tex2jax_ignore` and associated peculiarities
+* Would like to eliminate the need for the `tex2jax_ignore`
