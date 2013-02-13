@@ -1342,7 +1342,8 @@ function removeCoord(evt) {
 // just walks the DOM tree and preprocesses text nodes
 function processNodes(n) {
   // to be sure text in <body> is treated as text *node*, add empty <span>
-  if (n.nodeName == "BODY") n.appendChild(document.createElement("span"));
+  if (n.nodeName == "BODY" && typeof MathJax != "undefined") 
+    n.appendChild(document.createElement("span"));
   for (i=0;i<n.childNodes.length;i++) {
     if (n.childNodes[i].nodeType == Node.TEXT_NODE) {
       var nn = document.createElement("span");
