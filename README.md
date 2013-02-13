@@ -58,4 +58,6 @@ provide all necessary support, though.
 
 ### To Do:
 
-* `\begin{graph}...\end{graph}` not working....
+* `\begin{graph}...\end{graph}` not working -- this is just *too* similar to the
+`\begin{something}...\end{something}` syntax that the MathJax `tex2jax` preprocessor handles.
+Not sure what to do about this yet, not sure if anything can be done.
