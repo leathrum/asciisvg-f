@@ -255,8 +255,9 @@ function isSVGavailable() {
   an.setAttribute("href",
     "http://www.chapman.edu/~jipsen/svg/svgenabledmozillafirefox.html");
   nd.appendChild(an);
-  if (navigator.appName.slice(0,8)=="Netscape") 
-    if (window['SVGElement']) return null;
+  // this was blocking Opera -- fixed 2/13/13 TEL
+  if (navigator.appName.slice(0,8)=="Netscape" || navigator.appName.slice(0,5)=="Opera") 
+    if (window['SVGElement'] || window['SVGSVGElement']) return null;
     else return nd;
   else if (navigator.appName.slice(0,9)=="Microsoft")
     try {
