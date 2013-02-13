@@ -49,7 +49,8 @@ MathJax TeX input, backslashes must be doubled, including in the TeX delimiters.
 * The contents of `agraph...endagraph` and `(:graph...:)` environments are given the
 CSS class `tex2jax_ignore` by the preprocessor, to protect the contents from the MathJax preprocessor.
 This does not need to be done explicitly in the HTML.
-* *Browser Support:*  Tested in Firefox and Chrome, probably also works in Safari and Opera.  In order for a
+* *Browser Support:*  Tested in Firefox, Chrome, and Opera (required a fix to ASCIIMathML code),
+probably also works in Safari.  In order for a
 browser to support this, the browser must support SVG and in particular the `foreignObject` element and must 
 allow JavaScript to manipulate the DOM for the `foreignObject` element.  This is known to work in Gecko and
 Webkit browsers recent enough to support SVG.  The situation is different, and more complicated, for Internet
