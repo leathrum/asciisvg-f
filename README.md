@@ -52,8 +52,9 @@ This does not need to be done explicitly in the HTML.
 * *Browser Support:*  Tested in Firefox, Chrome, and Opera (required a fix to ASCIIMathML code),
 probably also works in Safari.  In order for a
 browser to support this, the browser must support SVG and in particular the `foreignObject` element and must 
-allow JavaScript to manipulate the DOM for the `foreignObject` element.  This is known to work in Gecko and
-Webkit browsers recent enough to support SVG.  The situation is different, and more complicated, for Internet
+allow JavaScript to manipulate the DOM for the `foreignObject` element.  This is known to work in 
+Gecko (Mozilla/Firefox), Webkit (Chrome, Safari), and Presto (Opera)
+browsers recent enough to support SVG.  The situation is different, and more complicated, for Internet
 Explorer.  IE9 supports SVG, but *not* the `foreignObject` element; IE with the Adobe SVGViewer plug-in should
 provide all necessary support, though.
 
