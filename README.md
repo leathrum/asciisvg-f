@@ -21,8 +21,8 @@ The test file uses the `ASCIIMathML-svg.js` version.
 
 * `ASCIIMathML-svg.js` is based on ASCIIMathML version 2.0.2, and includes support for the `agraph...endagraph`
 syntax for delimiting the graphing environment, as well as a few other features.
-*Warning:* The `\begin{graph}...\end{graph}` syntax is not working yet, at least not without
-wrapping it in a `tex2jax_ignore` region to protect it from the MathJax preprocessor.
+*Warning:* The `\begin{graph}...\end{graph}` syntax is not working yet when also using MathJax,
+at least not without wrapping it in a `tex2jax_ignore` region to protect it from the MathJax preprocessor.
 * `ASCIIsvg.js` is based on ASCIIsvg version 1.2, which is missing a few features found in the graphing routines included
 with the current version of ASCIIMathML -- notably, this does *not* support the `agraph...endagraph` or 
 `\begin{graph}...\end{graph}` syntax for delimiting the graphing environment, you have to use the `<embed>`
