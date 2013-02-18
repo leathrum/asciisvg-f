@@ -63,3 +63,11 @@ provide all necessary support, though.
 * `\begin{graph}...\end{graph}` not working -- this is just *too* similar to the
 `\begin{something}...\end{something}` syntax that the MathJax `tex2jax` preprocessor handles.
 Not sure what to do about this yet, not sure if anything can be done.
+* Having had to deal with the browser-detecting code to fix Opera support, and having had some time to think about
+that now, I think it would be a good idea to fix that code.  It uses a couple of different tests in different
+places in the code, and IE support testing is based on the Adobe plug-in, which Adobe no longer supports (and
+hasn't since around 2009).  The question is whether I should abandon support for IE versions 8 or before because
+they don't support SVG, or look for a different plug-in that I can support.  I'm currently inclined to think
+in terms of *not* supporting the earlier IE versions, but posting a message about browser support.  I can also
+do the same sort of messaging more locally for later IE versions in the code for `foreignObject`, since the
+later versions of IE still don't support that tag.
