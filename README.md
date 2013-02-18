@@ -71,3 +71,7 @@ they don't support SVG, or look for a different plug-in that I can support.  I'm
 in terms of *not* supporting the earlier IE versions, but posting a message about browser support.  I can also
 do the same sort of messaging more locally for later IE versions in the code for `foreignObject`, since the
 later versions of IE still don't support that tag.
+* I tried this in Wordpress with the MathJax plug-in, and it isn't working correctly, probably because of some 
+timing-related issues with the plug-in.  Need to look at this some more.  If I put a file using this 
+into an `<iframe>` in a Wordpress post, everything's fine, but if I try to include the library with a `<script>` tag,
+timing gets messed up and one of the scripts hangs.
