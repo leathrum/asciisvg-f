@@ -49,20 +49,28 @@ FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 var translateOnLoad = true;    // set to false to do call translators from js 
 var translateASCIIsvg = true;  // false to preserve agraph.., \begin{graph}..
 var avoidinnerHTML = false;   // set true if assigning to innerHTML gives error
-var dsvglocation = ""; // path to d.svg (blank if same as ASCIIMathML.js loc)
+// eliminating d.svg -- not needed in IE9+
+//var dsvglocation = ""; // path to d.svg (blank if same as ASCIIMathML.js loc)
 
-var isIE = document.createElementNS==null;
+// this test no longer valid -- IE9 supports createElementNS()
+// var isIE = document.createElementNS==null;
+// feature tests:
+var hasCreateWithNS = !(document.createElementNS==null);
+var hasGetByID = !(document.getElementById==null);
+var hasWindowSVG = (window['SVGElement'] || window['SVGSVGElement']);
+var hasButtonSetOnClickAttr = !(myCreateElementXHTML("button").setAttribute == null)
 
-if (document.getElementById==null) 
+if (!hasGetByID) 
   alert("This webpage requires a recent browser such as\
-\nMozilla/Netscape 7+ or Internet Explorer 6+MathPlayer")
+\nFirefox 4+, Internet Explorer 9+, Opera 9+, Chrome 4+, or Safari 4+")
 
 
 // next method adapted from LaTeX part of ASCIIMathML.js
 // added tex2jax_ignore to class
 function simpleLaTeXformatting(st) {
-  st = st.replace(/<embed\s+class\s?=\s?"ASCIIsvg"/g,"<embed class=\"ASCIIsvg tex2jax_ignore\" src=\""+dsvglocation+"d.svg\" wmode=\"transparent\"");
-  st = st.replace(/(?:\\begin{a?graph}|agraph|\(:graph\s)((.|\n)*?)(?:\\end{a?graph}|enda?graph|:\))/g,function(s,t){return "<div><embed class=\"ASCIIsvg tex2jax_ignore\" src=\""+dsvglocation+"d.svg\" wmode=\"transparent\" script=\'"+t.replace(/<\/?(br|p|pre)\s?\/?>/gi,"\n")+"\'/></div>"});
+// test deleting d.svg: src=\""+dsvglocation+"d.svg\" before wmode in both below
+  st = st.replace(/<embed\s+class\s?=\s?"ASCIIsvg"/g,"<embed class=\"ASCIIsvg tex2jax_ignore\" wmode=\"transparent\"");
+  st = st.replace(/(?:\\begin{a?graph}|agraph|\(:graph\s)((.|\n)*?)(?:\\end{a?graph}|enda?graph|:\))/g,function(s,t){return "<div><embed class=\"ASCIIsvg tex2jax_ignore\" wmode=\"transparent\" script=\'"+t.replace(/<\/?(br|p|pre)\s?\/?>/gi,"\n")+"\'/></div>"});
 //  st = st.replace(/\(:graph((.|\n)*?):\)/g,function(s,t){return "<div><embed class=\"ASCIIsvg\" src=\""+dsvglocation+"d.svg\" wmode=\"transparent\" script=\'"+t.replace(/<\/?(br|p|pre)\s?\/?>/gi,"\n")+"\'/></div>"});
   return st
 }
@@ -148,7 +156,7 @@ var strokewidth, strokedasharray, stroke, fill, strokeopacity, fillopacity;
 var fontstyle, fontfamily, fontsize, fontweight, fontstroke, fontfill;
 var marker, endpoints, dynamic = {};
 var picture, svgpicture, doc, width, height, a, b, c, d, i, n, p, t, x, y;
-var isIE = document.createElementNS==null;
+// var isIE = document.createElementNS==null;
 
 var cpi = "\u03C0", ctheta = "\u03B8";      // character for pi, theta
 var log = function(x) { return ln(x)/ln(10) };
@@ -206,12 +214,12 @@ function ran(a,b,n) { // Generate random number in [a,b] with n digits after .
 }
 
 function myCreateElementXHTML(t) {
-  if (isIE) return document.createElement(t);
+  if (!hasCreateWithNS) return document.createElement(t);
   else return document.createElementNS("http://www.w3.org/1999/xhtml",t);
 }
 
 function myCreateElementSVG(t) {
-  if (isIE) return doc.createElement(t);
+  if (!hasCreateWithNS) return doc.createElement(t);
   else return doc.createElementNS("http://www.w3.org/2000/svg",t);
 }
 
@@ -255,18 +263,10 @@ function isSVGavailable() {
   an.setAttribute("href",
     "http://www.chapman.edu/~jipsen/svg/svgenabledmozillafirefox.html");
   nd.appendChild(an);
-  // this was blocking Opera -- fixed 2/13/13 TEL
-  if (navigator.appName.slice(0,8)=="Netscape" || navigator.appName.slice(0,5)=="Opera") 
-    if (window['SVGElement'] || window['SVGSVGElement']) return null;
+
+  // new feature test code below
+    if (hasWindowSVG) return null;
     else return nd;
-  else if (navigator.appName.slice(0,9)=="Microsoft")
-    try {
-      var oSVG=eval("new ActiveXObject('Adobe.SVGCtl.3');");
-        return null;
-    } catch (e) {
-        return nd;
-    }
-  else return nd;
 }
 
 function setText(st,id) { // add text to an existing node with given id
@@ -278,12 +278,14 @@ function setText(st,id) { // add text to an existing node with given id
 
 function getX(evt) { // return mouse x-coord in user coordinate system
   var svgroot = evt.target.parentNode;
-  return (evt.clientX+(isIE?0:window.pageXOffset)-svgroot.getAttribute("left")-svgroot.getAttribute("ox"))/(svgroot.getAttribute("xunitlength")-0);
+  // eliminated "isIE" from below, using "!!window.pageXOffset" instead
+  return (evt.clientX+(!!window.pageXOffset?0:window.pageXOffset)-svgroot.getAttribute("left")-svgroot.getAttribute("ox"))/(svgroot.getAttribute("xunitlength")-0);
 }
 
 function getY(evt) { // return mouse y-coord in user coordinate system
   var svgroot = evt.target.parentNode;
-  return (svgroot.getAttribute("height")-svgroot.getAttribute("oy")-(evt.clientY+(isIE?0:window.pageYOffset)-svgroot.getAttribute("top")))/(svgroot.getAttribute("yunitlength")-0);
+  // eliminated "isIE" from below, using "!!window.pageXOffset" instead
+  return (svgroot.getAttribute("height")-svgroot.getAttribute("oy")-(evt.clientY+(!!window.pageXOffset?0:window.pageYOffset)-svgroot.getAttribute("top")))/(svgroot.getAttribute("yunitlength")-0);
 }
 
 function translateandeval(src) { //modify user input to JavaScript syntax
@@ -321,13 +323,13 @@ function drawPictures() { // main routine; called after webpage has loaded
   var ASbody = document.getElementsByTagName("body")[0];
   pictures = getElementsByClass(ASbody,"embed","ASCIIsvg");
   var len = pictures.length;
+
+  // look at browser tests here again -- some of this can be fixed in other places
   if (checkIfSVGavailable) {
     nd = isSVGavailable();
     if (nd != null && notifyIfNoSVG && len>0)
       if (alertIfNoSVG)
-        alert("To view the SVG pictures in Internet Explorer\n\
-download the free Adobe SVGviewer from www.adobe.com/svg or\n\
-use Firefox 2.0 or later");
+        alert("For Internet Explorer, requires Version 9 or later");
       else {
         ASbody.insertBefore(nd,ASbody.childNodes[0]);
       }
@@ -348,11 +350,9 @@ use Firefox 2.0 or later");
      src = (i==0?"axes(); "+src: src.slice(0,i)+src.slice(i).replace(/((scl|max|min|idth|eight)\s*=\s*-?\d*(\d\.|\.\d|\d)\d*\s*;?)/,"$1\naxes();"));
    }
    ht = picture.getAttribute("height");
-   if (isIE) {
+   // changed test below from "isIE" -- trying to eliminate those
+   if (picture.getAttribute("wmode")=="") {
      picture.setAttribute("wmode","transparent");
-//alert("*"+picture.getAttribute("src")+dsvglocation);
-//adding d.svg dynamically greates problems in IE...
-     if (picture.getAttribute("src")=="") picture.setAttribute("src",dsvglocation+"d.svg");
    }
    if (document.getElementById("picture"+(index+1)+"mml")==null) {
      picture.parentNode.style.position = "relative";
@@ -364,7 +364,6 @@ use Firefox 2.0 or later");
      picture.parentNode.insertBefore(node,picture.nextSibling);
    }
    if (ht==null) ht ="";
-//   if (ht!="") defaultborder = 25;
    if (ht=="" || src=="") 
     if (document.getElementById("picture"+(index+1)+"input")==null) {
       node = myCreateElementXHTML("textarea");
@@ -373,8 +372,8 @@ use Firefox 2.0 or later");
       for (i=0;i<arr.length;i++) cols = Math.max(cols,arr[i].length);
       node.setAttribute("rows",Math.min(10,arr.length)+1);
       node.setAttribute("cols",Math.max(Math.min(60,cols),20)+5);
-//      node.setAttribute("style","display:block");
-      if (isIE) src = src.replace(/([^\r])\n/g,"$1\r");
+      // instead of testing for IE, test for existence of "\r\n" pairs and deal with them
+      if (src.indexOf("\r\n")>-1) src = src.replace(/([^\r])\n/g,"$1\r");
       node.appendChild(document.createTextNode(src));
       if (src.indexOf("showcode()")==-1) node.style.display = "none";
       node.setAttribute("id","picture"+(index+1)+"input");
@@ -382,8 +381,10 @@ use Firefox 2.0 or later");
       picture.parentNode.insertBefore(myCreateElementXHTML("br"),node);
       node2 = myCreateElementXHTML("button");
       node2.setAttribute("id","picture"+(index+1)+"button");
-      if (isIE) node2.onclick = function() {updatePicture(this)};
-      else node2.setAttribute("onclick","updatePicture(this)");
+      // instead of testing fro IE, use feature existence test here
+      if (hasButtonSetOnClickAttr) node2.setAttribute("onclick","updatePicture(this)");
+      else node2.onclick = function() {updatePicture(this)};
+      node2.setAttribute("onclick","updatePicture(this)");
       node2.appendChild(document.createTextNode("Update"));
       if (src.indexOf("showcode()")==-1) node2.style.display = "none";
       picture.parentNode.insertBefore(node2,node);
@@ -422,13 +423,9 @@ function switchTo(id) { // used by dynamic code to select appropriate graph
   width = picture.getAttribute("width")-0;
   height = picture.getAttribute("height")-0;
   setdefaults();
-  if ((picture.nodeName == "EMBED" || picture.nodeName == "embed") && isIE) {
-    svgpicture = picture.getSVGDocument().getElementById("root");
-    doc = picture.getSVGDocument();
-  } else {
+  // eliminated some d.svg-related code here
     svgpicture = picture;
     doc = document;
-  }
   xunitlength = svgpicture.getAttribute("xunitlength")-0;
   yunitlength = svgpicture.getAttribute("yunitlength")-0;
   xmin = svgpicture.getAttribute("xmin")-0;
@@ -447,7 +444,6 @@ function updatePicture(obj) {
   xscl = null; xgrid = null; yscl = null; ygrid = null;
   initialized = false;
   picture = document.getElementById(id);
-//  switchTo(id);
   translateandeval(src)
 }
 
@@ -459,7 +455,6 @@ function changepicturesize(evt,factor) {
   src = src.replace(/width\s*=\s*\d+/,"width="+(factor*(pic.getAttribute("width")-0)));
   src = src.replace(/height\s*=\s*\d+/,"height="+(factor*(pic.getAttribute("height")-0)));
   document.getElementById(name+"input").value = src;
-//alert(getKey(evt.keycode))
   updatePicture(name);
 }
 
@@ -537,7 +532,6 @@ function initPicture(x_min,x_max,y_min,y_max) { // set up the graph
   picture.setAttribute("height",height);
   xunitlength = (width-2*border)/(xmax-xmin);
   yunitlength = xunitlength;
-//alert(xmin+" "+xmax+" "+ymin+" "+ymax)
   if (ymin==null) {
     origin = [-xmin*xunitlength+border,height/2];
     ymin = -(height-2*border)/(2*yunitlength);
@@ -547,27 +541,31 @@ function initPicture(x_min,x_max,y_min,y_max) { // set up the graph
     else ymax = (height-2*border)/yunitlength + ymin;
     origin = [-xmin*xunitlength+border,-ymin*yunitlength+border];
   }
-  if (isIE) {
-    if (picture.FULLSCREEN==undefined) {
-      setTimeout('drawPictures()',50);
-      throw "wait";
-    }
-    svgpicture = picture.getSVGDocument().getElementById("root");
-    if (svgpicture==null) {
-      setTimeout('drawPictures()',50);
-      throw "wait";
-    }
-    svgpicture = picture.getSVGDocument().getElementById("root");
-    while (svgpicture.childNodes.length>0) 
-      svgpicture.removeChild(svgpicture.lastChild); 
-    svgpicture.setAttribute("width",width);
-    svgpicture.setAttribute("height",height);
-    svgpicture.setAttribute("name",picture.getAttribute("id"));
-    doc = picture.getSVGDocument();
-    var nd = document.getElementById(picture.getAttribute("id")+"mml");
-    if (nd!=null) // clear out MathML layer
-      while (nd.childNodes.length>0) nd.removeChild(nd.lastChild); 
-  } else {
+  // everything up to here valid enough...
+  // want to eliminate "isIE" test below -- last one
+  // keeping here commented out just in case
+  //if (isIE) {
+  //  if (picture.FULLSCREEN==undefined) {
+  //    setTimeout('drawPictures()',50);
+  //    throw "wait";
+  //  }
+  //  svgpicture = picture.getSVGDocument().getElementById("root");
+    // this code seems to be based on the d.svg which also shouldn't be necessary anymore
+  //  if (svgpicture==null) {
+  //    setTimeout('drawPictures()',50);
+  //    throw "wait";
+  //  }
+  //  svgpicture = picture.getSVGDocument().getElementById("root");
+  //  while (svgpicture.childNodes.length>0) 
+  //    svgpicture.removeChild(svgpicture.lastChild); 
+  //  svgpicture.setAttribute("width",width);
+  //  svgpicture.setAttribute("height",height);
+  //  svgpicture.setAttribute("name",picture.getAttribute("id"));
+  //  doc = picture.getSVGDocument();
+  //  var nd = document.getElementById(picture.getAttribute("id")+"mml");
+  //  if (nd!=null) // clear out MathML layer
+  //    while (nd.childNodes.length>0) nd.removeChild(nd.lastChild); 
+  //} else {
     var qnode = document.createElementNS("http://www.w3.org/2000/svg","svg");
     qnode.setAttribute("id",picture.getAttribute("id"));
     qnode.setAttribute("name",picture.getAttribute("id"));
@@ -585,7 +583,7 @@ function initPicture(x_min,x_max,y_min,y_max) { // set up the graph
     }
     svgpicture = qnode;
     doc = document;
-  }
+  //}
   svgpicture.setAttribute("xunitlength",xunitlength);
   svgpicture.setAttribute("yunitlength",yunitlength);
   svgpicture.setAttribute("xmin",xmin);
@@ -726,7 +724,6 @@ function loop(p,d,id) {
 
 function arc(start,end,radius,id) { // coordinates in units
   var node, v;
-//alert([fill, stroke, origin, xunitlength, yunitlength, height])
   if (id!=null) node = doc.getElementById(id);
   if (radius==null) {
     v=[end[0]-start[0],end[1]-start[1]];
@@ -749,7 +746,6 @@ function arc(start,end,radius,id) { // coordinates in units
   if (marker=="arrow" || marker=="arrowdot") {
     u = [(end[1]-start[1])/4,(start[0]-end[0])/4];
     v = [(end[0]-start[0])/2,(end[1]-start[1])/2];
-//alert([u,v])
     v = [start[0]+v[0]+u[0],start[1]+v[1]+u[1]];
   } else v=[start[0],start[1]];
   if (marker=="dot" || marker=="arrowdot") {
@@ -812,6 +808,7 @@ function rect(p,q,id,rx,ry) { // opposite corners in units, rounded by radii
 function text(p,st,pos,id,fontsty) {
   var dnode, node, dx = 0, dy = fontsize/3;
 // no longer have ASCIIMath or LaTeX code, so next section deleted
+// kept here commented out just in case
 //  if (/(`|\$)/.test(st)) {  // layer for ASCIIMathML and LaTeXMathML
 //    dnode = document.getElementById(svgpicture.getAttribute("name")+"mml");
 //    if (dnode!=null) {
@@ -860,7 +857,6 @@ function text(p,st,pos,id,fontsty) {
   }
   while (node.childNodes.length>1) node.removeChild(node.lastChild); 
 //  node.appendChild(document.createTextNode("\xA0"+st+"\xA0"));
-//alert("here");
   node.lastChild.nodeValue = "\xA0"+st+"\xA0";
   node.setAttribute("x",p[0]*xunitlength+origin[0]+dx);
   node.setAttribute("y",height-p[1]*yunitlength-origin[1]+dy);
@@ -877,8 +873,10 @@ function text(p,st,pos,id,fontsty) {
 
 // following method -- TEL 2/6/2013
 function foreign(p,st,id,fontsty) {
+  if (!myCreateElementSVG("foreignObject")) return text(p,"foreignObject not supported","below right");
+  else { // foreignObject supported, so...
   var node;
-  var frag = document.createElementNS("http://www.w3.org/1999/xhtml","div");
+  var frag = myCreateElementXHTML("div");
   frag.setAttribute("style","float:left");
   frag.innerHTML = st;
   var uid = "_asciisvg_f_foreign_object_content_"
@@ -910,6 +908,7 @@ function foreign(p,st,id,fontsty) {
   if (fontfill!="none") node.setAttribute("fill",fontfill);
 
   return p;
+  } // end case foreignObject supported
 }
 
 function mtext(p,st,pos,fontsty) { // method for updating text on an svg
@@ -1343,8 +1342,7 @@ function removeCoord(evt) {
 // just walks the DOM tree and preprocesses text nodes
 function processNodes(n) {
   // to be sure text in <body> is treated as text *node*, add empty <span>
-  if (n.nodeName == "BODY" && typeof MathJax != "undefined") 
-    n.appendChild(document.createElement("span"));
+  if (n.nodeName == "BODY") n.appendChild(document.createElement("span"));
   for (i=0;i<n.childNodes.length;i++) {
     if (n.childNodes[i].nodeType == Node.TEXT_NODE) {
       var nn = document.createElement("span");
@@ -1377,6 +1375,9 @@ function generic()
   }
 };
 //setup onload function
+// can browser tests here be updated and combined with tests in other places?
+// tests here specific to addEventListener support
+// probably best to test other API support as needed in other places
 if(typeof window.addEventListener != 'undefined')
 {
   //.. gecko, safari, konqueror and standard
@@ -1389,10 +1390,11 @@ else if(typeof document.addEventListener != 'undefined')
 }
 else if(typeof window.attachEvent != 'undefined')
 {
-  //.. win/ie
+  //.. win/ie (up to 8)
   window.attachEvent('onload', generic);
 }
 //** remove this condition to degrade older browsers
+// at this point, should probably remove the rest of this... or not...
 else
 {
   //.. mac/ie5 and anything else that gets this far
