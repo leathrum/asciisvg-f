@@ -55,22 +55,14 @@ browser to support this, the browser must support SVG and in particular the `for
 allow JavaScript to manipulate the DOM for the `foreignObject` element.  This is known to work in 
 Gecko (Mozilla/Firefox), Webkit (Chrome, Safari), and Presto (Opera)
 browsers recent enough to support SVG.  The situation is different, and more complicated, for Internet
-Explorer.  IE9 supports SVG, but *not* the `foreignObject` element; IE with the Adobe SVGViewer plug-in should
-provide all necessary support, though.
+Explorer.  IE9 supports SVG, but *not* the `foreignObject` element.  In the most recent update here, support
+for Explorer plug-ins such as the Adobe plug-in for SVG was removed, so this will not work for IE8 or earlier.
 
 ### To Do:
 
 * `\begin{graph}...\end{graph}` not working -- this is just *too* similar to the
 `\begin{something}...\end{something}` syntax that the MathJax `tex2jax` preprocessor handles.
 Not sure what to do about this yet, not sure if anything can be done.
-* Having had to deal with the browser-detecting code to fix Opera support, and having had some time to think about
-that now, I think it would be a good idea to fix that code.  It uses a couple of different tests in different
-places in the code, and IE support testing is based on the Adobe plug-in, which Adobe no longer supports (and
-hasn't since around 2009).  The question is whether I should abandon support for IE versions 8 or before because
-they don't support SVG, or look for a different plug-in that I can support.  I'm currently inclined to think
-in terms of *not* supporting the earlier IE versions, but posting a message about browser support.  I can also
-do the same sort of messaging more locally for later IE versions in the code for `foreignObject`, since the
-later versions of IE still don't support that tag.
 * I tried this in Wordpress with the MathJax plug-in, and it isn't working correctly, probably because of some 
 timing-related issues with the plug-in.  Need to look at this some more.  If I put a file using this 
 into an `<iframe>` in a Wordpress post, everything's fine, but if I try to include the library with a `<script>` tag,
